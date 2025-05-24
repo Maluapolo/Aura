@@ -1,0 +1,125 @@
+.page-container {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #f4f5f8;
+  overflow: auto;
+}
+
+.auth-card {
+  background-color: white;
+  margin: -60px auto 20px auto;
+  padding: 30px 20px;
+  border-radius: 20px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  width: calc(100% - 40px);
+  max-width: 400px;
+  z-index: 2;
+  position: relative;
+}
+
+.input-group {
+  margin-bottom: 20px;
+
+  label {
+    display: block;
+    font-size: 0.9em;
+    color: #666;
+    margin-bottom: 5px;
+  }
+
+  input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    font-size: 1em;
+    background-color: #f0f0f0;
+    box-sizing: border-box;
+    color: black;
+
+    &:focus {
+      outline: none;
+      border-color: #87ceeb;
+      box-shadow: 0 0 0 3px rgba(91, 178, 233, 0.3);
+    }
+  }
+}
+
+.primary-button {
+  width: 100%;
+  padding: 15px;
+  background-color: #87ceeb;
+  color: white;
+  border: none;
+  border-radius: 25px;
+  font-size: 1.1em;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 15px;
+
+  &:hover {
+    background-color: #4a9dd6;
+  }
+}
+
+.secondary-button {
+  width: 100%;
+  padding: 15px;
+  background-color: transparent;
+  color: #87ceeb;
+  border: 2px solid #87ceeb;
+  border-radius: 25px;
+  font-size: 1.1em;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 20px;
+
+  &:hover {
+    background-color: #e0f2fe;
+  }
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 25px 0;
+  color: #888;
+  font-size: 0.9em;
+
+  hr {
+    flex-grow: 1;
+    border: none;
+    border-top: 1px solid #ddd;
+  }
+
+  span {
+    padding: 0 10px;
+  }
+}
+
+.forgot-password-link {
+  display: block;
+  text-align: center;
+  margin-top: 25px;
+  color: #5bb2e9;
+  font-weight: bold;
+  text-decoration: none;
+  font-size: 0.95em;
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+/* Opcional: Ajustes básicos para telas menores */
+@media (max-width: 480px) {
+  .auth-card {
+    margin-top: -40px;
+  }
+}

@@ -1,0 +1,28 @@
+/* Estilos para o componente de cabeçalho */
+.header-container {
+  display: flex; /* Usa flexbox para alinhar itens */
+  flex-direction: column; /* Coloca itens em coluna (ícone em cima, título embaixo) */
+  align-items: center; /* Centraliza horizontalmente */
+  justify-content: center; /* Centraliza verticalmente */
+  padding: 20px 0; /* Espaçamento interno superior e inferior */
+  background-color: #87ceeb; /* Cor de fundo principal */
+  color: white; /* Cor do texto e ícone (para SVG, mas não afeta PNG) */
+  border-radius: 0 0 40px 40px; /* Borda arredondada apenas na parte inferior */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra suave */
+  height: 40vh; /* Altura de 40% da viewport */
+}
+
+img {
+  width: 100px; /* Largura do ícone */
+  height: 100px; /* Altura do ícone */
+  margin-bottom: 10px; /* Espaçamento abaixo do ícone */
+}
+
+.app-title {
+  font-family: 'Inter', sans-serif; /* Fonte Inter */
+  font-size: 2.8em; /* Tamanho da fonte do título */
+  font-weight: bold; /* Negrito */
+  margin: 0; /* Remove margens padrão */
+  color: #6a889a; /* Cor do título (cinza-azulada) */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* Sombra no texto para destaque */
+}

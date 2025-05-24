@@ -1,0 +1,65 @@
+/* frontend/src/app/pages/home/home.page.scss */
+
+.page-container {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #f4f5f8; /* Fundo cinza claro */
+  overflow: auto; /* Permite scroll se o conteúdo for maior que a tela */
+}
+
+.home-card {
+  background-color: white;
+  margin: -60px auto 20px auto; /* Move o card para cima, sobrepondo o header um pouco */
+  padding: 30px 20px;
+  border-radius: 20px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  width: calc(100% - 40px); /* Ocupa a largura total menos o padding */
+  max-width: 400px; /* Largura do card */
+  z-index: 2; /* Garante que o card fique acima do header */
+  text-align: center; /* Centraliza o texto dentro do card */
+}
+
+.welcome-title {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.8em;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.message {
+  font-size: 1em;
+  color: #555;
+  margin-bottom: 10px;
+}
+
+.primary-button {
+  width: 100%;
+  padding: 15px;
+  background-color: #87ceeb;
+  color: white;
+  border: none;
+  border-radius: 25px;
+  font-size: 1.1em;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 30px; /* Espaçamento acima do botão */
+}
+
+.primary-button:hover {
+  background-color: #4a9dd6;
+}
+
+/* Ajustes para telas menores */
+@media (max-width: 450px) {
+  .home-card {
+    padding: 20px;
+    margin: -40px auto 20px auto; /* Ajuste para telas menores */
+  }
+  .welcome-title {
+    font-size: 1.6em;
+  }
+}

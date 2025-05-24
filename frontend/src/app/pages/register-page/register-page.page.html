@@ -1,0 +1,68 @@
+<div class="page-container">
+  <app-header></app-header>
+
+  <div class="register-card">
+    <div class="title-text-register">
+      <p>Comece a</p>
+      <h1>Criar Sua Conta</h1>
+    </div>
+
+    <div class="input-group">
+      <label for="full-name-input">Nome completo</label>
+      <input
+        type="text"
+        id="full-name-input"
+        placeholder=""
+        [(ngModel)]="fullName"
+        required
+      />
+    </div>
+
+    <div class="input-group">
+      <label for="email-input">E-mail</label>
+      <input
+        type="email"
+        id="email-input"
+        placeholder=""
+        [(ngModel)]="email"
+        required
+      />
+    </div>
+
+    <div class="input-group">
+      <label for="password-input">Senha</label>
+      <input
+        type="password"
+        id="password-input"
+        placeholder=""
+        [(ngModel)]="password"
+        required
+      />
+    </div>
+
+    <div class="input-group">
+      <label for="confirm-password-input">Repetir senha</label>
+      <input
+        type="password"
+        id="confirm-password-input"
+        placeholder=""
+        [(ngModel)]="confirmPassword"
+        required
+      />
+    </div>
+
+    <div class="terms-checkbox">
+      <input type="checkbox" id="agree-terms" [(ngModel)]="agreeTerms" />
+      <label for="agree-terms">Eu concordo com os <a href="#" class="terms-link">Termos de privacidade</a></label>
+    </div>
+
+    <button class="primary-button" (click)="register()">
+      Entrar
+    </button>
+
+    <div class="login-link-container">
+      <span>Já tem uma conta? </span>
+      <a href="#" class="login-link" (click)="goToLogin()">Entrar</a>
+    </div>
+  </div>
+</div>

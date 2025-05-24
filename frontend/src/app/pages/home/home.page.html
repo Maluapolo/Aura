@@ -1,0 +1,13 @@
+<div class="page-container">
+  <app-header></app-header>
+
+  <div class="home-card">
+    <h1 class="welcome-title">Bem-vindo, {{ userEmail || 'usuário' }}!</h1>
+    <p class="message">Você está logado com sucesso no Aura Weather App.</p>
+    <p class="message">Esta é a sua página principal. Aqui você verá informações sobre o clima.</p>
+
+    <button class="primary-button" (click)="logout()">
+      Sair
+    </button>
+  </div>
+</div>

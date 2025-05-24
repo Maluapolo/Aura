@@ -1,0 +1,147 @@
+/* Estilos para a página de registro */
+
+.page-container {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #f4f5f8; /* Fundo cinza claro */
+  overflow: auto; /* Permite scroll se o conteúdo for maior que a tela */
+}
+
+/* O .header-container do AppHeaderComponent já define a altura e o estilo superior */
+
+.register-card {
+  background-color: white;
+  margin: -60px auto 20px auto; /* Move o card para cima, sobrepondo o header um pouco */
+  padding: 30px 20px;
+  border-radius: 20px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  width: calc(100% - 40px); /* Ocupa a largura total menos o padding */
+  max-width: 450px; /* Um pouco mais largo para os campos extras */
+  z-index: 2; /* Garante que o card fique acima do header */
+  position: relative;
+}
+
+.title-text-register {
+  text-align: center;
+  margin-bottom: 30px; /* Espaço abaixo do título de registro */
+
+  p {
+    font-size: 1.2em;
+    color: #6a889a; /* Cor do texto "Comece a" */
+    margin: 0;
+  }
+
+  h1 {
+    font-size: 2em;
+    font-weight: bold;
+    color: #6a889a; /* Cor do texto "Criar Sua Conta" */
+    margin: 5px 0 0 0;
+  }
+}
+
+.input-group {
+  margin-bottom: 20px;
+
+  label {
+    display: block;
+    font-size: 0.9em;
+    color: #666;
+    margin-bottom: 5px;
+  }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="password"] {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #c0e6f7; /* Cor da borda mais clara, similar ao design */
+    border-radius: 10px;
+    font-size: 1em;
+    background-color: #f0f0f0;
+    box-sizing: border-box;
+    color: black;
+
+    &:focus {
+      outline: none;
+      border-color: #87ceeb; /* Cor principal no foco */
+      box-shadow: 0 0 0 3px rgba(135, 206, 235, 0.3); /* Sombra mais clara no foco */
+    }
+  }
+}
+
+.terms-checkbox {
+  display: flex;
+  align-items: center;
+  margin-top: 15px;
+  margin-bottom: 30px; /* Espaço antes do botão */
+  font-size: 0.9em;
+
+  input[type="checkbox"] {
+    margin-right: 10px;
+    width: 20px;
+    height: 20px;
+    accent-color: #87ceeb; /* Cor do checkbox quando marcado */
+  }
+
+  label {
+    color: #555;
+    cursor: pointer;
+  }
+
+  .terms-link {
+    color: #87ceeb; /* Cor azul para o link */
+    text-decoration: none;
+    font-weight: bold;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.primary-button {
+  width: 100%;
+  padding: 15px;
+  background-color: #87ceeb; /* Cor azul principal */
+  color: white;
+  border: none;
+  border-radius: 25px;
+  font-size: 1.1em;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 15px;
+
+  &:hover {
+    background-color: #4a9dd6; /* Tom mais escuro no hover */
+  }
+}
+
+.login-link-container {
+  text-align: center;
+  margin-top: 30px;
+  font-size: 0.95em;
+  color: #555;
+
+  .login-link {
+    color: #87ceeb;
+    font-weight: bold;
+    text-decoration: none;
+    cursor: pointer;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+/* Opcional: Ajustes para telas muito pequenas */
+@media (max-width: 480px) {
+  .register-card {
+    margin-top: -40px;
+    padding: 20px 15px;
+  }
+  .title-text-register h1 {
+    font-size: 1.8em;
+  }
+}
