@@ -7,7 +7,7 @@ import { Router, RouterModule } from '@angular/router';
 import { AlertController, LoadingController } from '@ionic/angular';
 
 import { AppHeaderComponent } from '../../components/app-header/app-header.component';
-// REMOVIDO: import { AuthService } from '../../services/auth/auth.service';
+import { AuthService } from '../../services/auth/auth.service'; // AGORA DESCOMENTADO
 
 @Component({
   selector: 'app-register-page',
@@ -18,7 +18,8 @@ import { AppHeaderComponent } from '../../components/app-header/app-header.compo
     CommonModule,
     FormsModule,
     AppHeaderComponent,
-    RouterModule
+    RouterModule,
+    // IonicModule // Certifique-se de que IonicModule está aqui se você usa componentes Ionic no HTML
   ],
 })
 export class RegisterPage implements OnInit {
@@ -32,16 +33,16 @@ export class RegisterPage implements OnInit {
     private router: Router,
     private alertCtrl: AlertController,
     private loadingCtrl: LoadingController,
-    // REMOVIDO: private authService: AuthService
+    private authService: AuthService // AGORA DESCOMENTADO E INJETADO
   ) {}
 
   ngOnInit() {
-    // REMOVIDO: Lógica de redirecionamento baseada no AuthService
-    // this.authService.isAuthenticated.subscribe(isAuth => {
-    //   if (isAuth) {
-    //     this.router.navigateByUrl('/home', { replaceUrl: true });
-    //   }
-    // });
+    // Lógica de redirecionamento baseada no AuthService (Pode ser reativada se quiser)
+    this.authService.isAuthenticated.subscribe(isAuth => {
+      if (isAuth) {
+        this.router.navigateByUrl('/home', { replaceUrl: true });
+      }
+    });
   }
 
   async register() {
@@ -66,19 +67,23 @@ export class RegisterPage implements OnInit {
     });
     await loading.present();
 
-    // Lógica de cadastro SIMULADA (como estava antes)
-    setTimeout(async () => {
-      await loading.dismiss();
-      console.log('Dados de Registro:', {
-        fullName: this.fullName,
-        email: this.email,
-        password: this.password,
-        agreeTerms: this.agreeTerms
-      });
-
-      await this.presentAlert('Sucesso', 'Sua conta foi criada com sucesso!');
-      this.router.navigateByUrl('/auth'); // Redireciona para a página de login
-    }, 2000);
+    // Lógica de cadastro AGORA USANDO AuthService (ainda simulado no AuthService, por enquanto)
+    this.authService.register(this.fullName, this.email, this.password).subscribe({
+      next: async (success) => {
+        await loading.dismiss();
+        if (success) {
+          await this.presentAlert('Sucesso', 'Sua conta foi criada com sucesso!');
+          this.router.navigateByUrl('/auth'); // Redireciona para a página de login
+        } else {
+          await this.presentAlert('Falha no Registro', 'Não foi possível criar sua conta. Tente novamente.');
+        }
+      },
+      error: async (err) => {
+        await loading.dismiss();
+        console.error('Erro no registro:', err);
+        await this.presentAlert('Erro', 'Ocorreu um erro ao tentar criar sua conta. Por favor, tente novamente.');
+      }
+    });
   }
 
   async goToLogin() {
