@@ -8,7 +8,7 @@ import { Router, RouterModule } from '@angular/router';
 
 // Importe o componente de cabeçalho
 import { AppHeaderComponent } from '../../components/app-header/app-header.component';
-// REMOVIDO: import { AuthService } from '../../services/auth/auth.service';
+import { AuthService } from '../../services/auth/auth.service'; // AGORA DESCOMENTADO
 
 @Component({
   selector: 'app-auth-page',
@@ -16,7 +16,7 @@ import { AppHeaderComponent } from '../../components/app-header/app-header.compo
   styleUrls: ['./auth-page.page.scss'],
   standalone: true,
   imports: [
-    IonicModule,
+    IonicModule, // Certifique-se de que IonicModule está aqui se você usa componentes Ionic no HTML
     CommonModule,
     FormsModule,
     AppHeaderComponent,
@@ -31,16 +31,16 @@ export class AuthPage implements OnInit {
     private alertCtrl: AlertController,
     private loadingCtrl: LoadingController,
     private router: Router,
-    // REMOVIDO: private authService: AuthService
+    private authService: AuthService // AGORA DESCOMENTADO E INJETADO
   ) {}
 
   ngOnInit() {
-    // REMOVIDO: Lógica de redirecionamento baseada no AuthService
-    // this.authService.isAuthenticated.subscribe(isAuth => {
-    //   if (isAuth) {
-    //     this.router.navigateByUrl('/home', { replaceUrl: true });
-    //   }
-    // });
+    // Opcional: Redirecionar se o usuário já estiver autenticado
+    this.authService.isAuthenticated.subscribe(isAuth => {
+      if (isAuth) {
+        this.router.navigateByUrl('/home', { replaceUrl: true });
+      }
+    });
   }
 
   async login() {
@@ -53,16 +53,31 @@ export class AuthPage implements OnInit {
     const loading = await this.loadingCtrl.create({ message: 'Entrando...', });
     await loading.present();
 
-    // Lógica de login SIMULADA (como estava antes)
-    setTimeout(async () => {
-      await loading.dismiss();
-      if (this.email === 'teste@aura.com' && this.password === '123456') {
-        await this.presentAlert('Sucesso', 'Login realizado com sucesso!');
-        this.router.navigateByUrl('/home'); // Redireciona para a página principal do app
-      } else {
-        await this.presentAlert('Erro', 'E-mail ou senha incorretos.');
+    // Lógica de login AGORA USANDO AuthService
+    this.authService.login(this.email, this.password).subscribe({
+      next: async (success) => {
+        await loading.dismiss();
+        if (success) {
+          await this.presentAlert('Sucesso', 'Login realizado com sucesso!');
+          this.router.navigateByUrl('/home', { replaceUrl: true }); // Redireciona para a página principal do app
+        } else {
+          // O AuthService já deve lidar com erros e retornar false, mas aqui é um fallback
+          await this.presentAlert('Erro', 'E-mail ou senha incorretos. Tente novamente.');
+        }
+      },
+      error: async (err) => {
+        await loading.dismiss();
+        console.error('Erro no login:', err);
+        // Firebase Auth retorna erros específicos, você pode refinar a mensagem aqui
+        let errorMessage = 'Ocorreu um erro ao tentar fazer login. Por favor, tente novamente.';
+        if (err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password') {
+          errorMessage = 'E-mail ou senha incorretos.';
+        } else if (err.code === 'auth/invalid-email') {
+          errorMessage = 'O formato do e-mail é inválido.';
+        }
+        await this.presentAlert('Erro', errorMessage);
       }
-    }, 1500);
+    });
   }
 
   async createAccount() {

@@ -73,7 +73,7 @@ export class RegisterPage implements OnInit {
         await loading.dismiss();
         if (success) {
           await this.presentAlert('Sucesso', 'Sua conta foi criada com sucesso!');
-          this.router.navigateByUrl('/auth'); // Redireciona para a página de login
+          this.router.navigateByUrl('/home'); // Redireciona para a página de login
         } else {
           await this.presentAlert('Falha no Registro', 'Não foi possível criar sua conta. Tente novamente.');
         }

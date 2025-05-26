@@ -1,21 +1,20 @@
 // frontend/src/app/services/auth/auth.service.ts
 
-import { Injectable } from '@angular/core'; // REMOVA 'Inject' se estiver aqui
+import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, from } from 'rxjs';
 import { Router } from '@angular/router';
 import { map, catchError, take } from 'rxjs/operators';
 
-// Importações do Firebase Authentication
+// Importações do Firebase Authentication - Sem getAuth aqui
 import {
-  Auth, // <--- O TIPO Auth AINDA É IMPORTADO PARA TIPAGEM
-  getAuth, // <--- AGORA PRECISAMOS DE 'getAuth' PARA OBTER A INSTÂNCIA
+  Auth, // <--- Importe APENAS o tipo Auth
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   signOut,
   User as FirebaseUser,
   onAuthStateChanged,
   updateProfile
-} from 'firebase/auth';
+} from '@angular/fire/auth'; // <--- O IMPORTADOR DEVE SER @angular/fire/auth
 
 interface User {
   uid: string;
@@ -33,13 +32,10 @@ export class AuthService {
   isAuthenticated: Observable<boolean> = this._isAuthenticated.asObservable();
   currentUser: Observable<User | null> = this._currentUser.asObservable();
 
-  private auth: Auth; // <--- DECLARAMOS A PROPRIEDADE 'auth' AQUI
-
-  // CONSTRUTOR SEM INJEÇÃO DE 'Auth'
-  constructor(private router: Router) {
-    // OBTEMOS A INSTÂNCIA DO AUTH DIRETAMENTE AQUI
-    // Isso contorna o problema de injeção do Angular
-    this.auth = getAuth();
+  // CONSTRUTOR COM INJEÇÃO DE 'Auth'
+  // O Angular irá fornecer a instância 'Auth' para você
+  constructor(private router: Router, private auth: Auth) { // <--- AQUI ESTÁ A CORREÇÃO CRÍTICA
+    // Não precisamos chamar getAuth() aqui. O Angular já injetou a instância 'auth'.
 
     // O restante do código é o mesmo
     onAuthStateChanged(this.auth, (firebaseUser: FirebaseUser | null) => {
@@ -57,9 +53,6 @@ export class AuthService {
       }
     });
   }
-
-  // O restante dos métodos (login, register, logout, isUserLoggedIn) permanecem os mesmos
-  // pois eles já usam 'this.auth'
 
   login(email: string, password: string): Observable<boolean> {
     return from(signInWithEmailAndPassword(this.auth, email, password)).pipe(
