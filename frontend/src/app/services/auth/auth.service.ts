@@ -3,18 +3,28 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, from } from 'rxjs';
 import { Router } from '@angular/router';
-import { map, catchError, take } from 'rxjs/operators';
+// Adicione concatMap aqui
+import { map, catchError, take, concatMap } from 'rxjs/operators'; // <-- MUDANÇA AQUI
 
-// Importações do Firebase Authentication - Sem getAuth aqui
+// Importações do Firebase Authentication
 import {
-  Auth, // <--- Importe APENAS o tipo Auth
+  Auth,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   signOut,
   User as FirebaseUser,
   onAuthStateChanged,
   updateProfile
-} from '@angular/fire/auth'; // <--- O IMPORTADOR DEVE SER @angular/fire/auth
+} from '@angular/fire/auth';
+
+// Importações do Firestore
+import {
+  Firestore,
+  collection,
+  doc,
+  setDoc,
+  serverTimestamp
+} from '@angular/fire/firestore';
 
 interface User {
   uid: string;
@@ -32,12 +42,7 @@ export class AuthService {
   isAuthenticated: Observable<boolean> = this._isAuthenticated.asObservable();
   currentUser: Observable<User | null> = this._currentUser.asObservable();
 
-  // CONSTRUTOR COM INJEÇÃO DE 'Auth'
-  // O Angular irá fornecer a instância 'Auth' para você
-  constructor(private router: Router, private auth: Auth) { // <--- AQUI ESTÁ A CORREÇÃO CRÍTICA
-    // Não precisamos chamar getAuth() aqui. O Angular já injetou a instância 'auth'.
-
-    // O restante do código é o mesmo
+  constructor(private router: Router, private auth: Auth, private firestore: Firestore) {
     onAuthStateChanged(this.auth, (firebaseUser: FirebaseUser | null) => {
       if (firebaseUser) {
         const user: User = {
@@ -68,11 +73,33 @@ export class AuthService {
   }
 
   register(fullName: string, email: string, password: string): Observable<boolean> {
+    // Mude 'map' para 'concatMap' AQUI
     return from(createUserWithEmailAndPassword(this.auth, email, password)).pipe(
-      map((userCredential) => {
-        if (userCredential.user) {
-          updateProfile(userCredential.user, { displayName: fullName })
-            .catch(profileError => console.error('Erro ao atualizar perfil:', profileError));
+      concatMap(async (userCredential) => { // <-- MUDANÇA AQUI (map para concatMap)
+        const user = userCredential.user;
+
+        if (user) {
+          // 1. Atualizar o perfil no Firebase Authentication (displayName)
+          await updateProfile(user, { displayName: fullName })
+            .catch(profileError => console.error('Erro ao atualizar perfil (Auth):', profileError));
+
+          // 2. SALVAR AS INFORMAÇÕES NO FIRESTORE
+          const usersCollection = collection(this.firestore, 'users');
+          const userDocRef = doc(usersCollection, user.uid);
+
+          const userData = {
+            uid: user.uid,
+            email: user.email,
+            fullName: fullName,
+            createdAt: serverTimestamp()
+          };
+
+          try {
+            await setDoc(userDocRef, userData);
+            console.log('Dados do usuário salvos no Firestore com sucesso!', userData);
+          } catch (firestoreError) {
+            console.error('Erro ao salvar dados do usuário no Firestore:', firestoreError);
+          }
         }
 
         this.router.navigateByUrl('/home', { replaceUrl: true });

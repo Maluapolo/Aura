@@ -4,10 +4,10 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import { AlertController, LoadingController } from '@ionic/angular';
+import { AlertController, LoadingController, IonicModule } from '@ionic/angular'; // <-- Adicionado IonicModule aqui
 
 import { AppHeaderComponent } from '../../components/app-header/app-header.component';
-import { AuthService } from '../../services/auth/auth.service'; // AGORA DESCOMENTADO
+import { AuthService } from '../../services/auth/auth.service';
 
 @Component({
   selector: 'app-register-page',
@@ -19,7 +19,7 @@ import { AuthService } from '../../services/auth/auth.service'; // AGORA DESCOME
     FormsModule,
     AppHeaderComponent,
     RouterModule,
-    // IonicModule // Certifique-se de que IonicModule está aqui se você usa componentes Ionic no HTML
+    IonicModule // <-- DESCOMENTADO/ADICIONADO AQUI
   ],
 })
 export class RegisterPage implements OnInit {
@@ -33,11 +33,11 @@ export class RegisterPage implements OnInit {
     private router: Router,
     private alertCtrl: AlertController,
     private loadingCtrl: LoadingController,
-    private authService: AuthService // AGORA DESCOMENTADO E INJETADO
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
-    // Lógica de redirecionamento baseada no AuthService (Pode ser reativada se quiser)
+    // Lógica de redirecionamento se o usuário já estiver autenticado ao entrar nesta página
     this.authService.isAuthenticated.subscribe(isAuth => {
       if (isAuth) {
         this.router.navigateByUrl('/home', { replaceUrl: true });
@@ -67,21 +67,30 @@ export class RegisterPage implements OnInit {
     });
     await loading.present();
 
-    // Lógica de cadastro AGORA USANDO AuthService (ainda simulado no AuthService, por enquanto)
+    // Lógica de cadastro usando AuthService
     this.authService.register(this.fullName, this.email, this.password).subscribe({
       next: async (success) => {
         await loading.dismiss();
         if (success) {
           await this.presentAlert('Sucesso', 'Sua conta foi criada com sucesso!');
-          this.router.navigateByUrl('/home'); // Redireciona para a página de login
+          this.router.navigateByUrl('/home', { replaceUrl: true }); // <-- MUDANÇA AQUI: Adicionado replaceUrl: true e corrigido comentário
         } else {
           await this.presentAlert('Falha no Registro', 'Não foi possível criar sua conta. Tente novamente.');
         }
       },
       error: async (err) => {
         await loading.dismiss();
-        console.error('Erro no registro:', err);
-        await this.presentAlert('Erro', 'Ocorreu um erro ao tentar criar sua conta. Por favor, tente novamente.');
+        console.error('Erro no registro Firebase:', err);
+        // Tratar erros específicos do Firebase Auth para o registro
+        let errorMessage = 'Ocorreu um erro ao tentar criar sua conta. Por favor, tente novamente.';
+        if (err.code === 'auth/email-already-in-use') {
+          errorMessage = 'Este e-mail já está em uso. Por favor, use outro e-mail.';
+        } else if (err.code === 'auth/weak-password') {
+          errorMessage = 'A senha é muito fraca. Ela deve ter pelo menos 6 caracteres.';
+        } else if (err.code === 'auth/invalid-email') {
+          errorMessage = 'O formato do e-mail é inválido.';
+        }
+        await this.presentAlert('Erro', errorMessage);
       }
     });
   }
