@@ -1,65 +1,186 @@
-/* frontend/src/app/pages/home/home.page.scss */
+// home.page.scss
 
-.page-container {
-  width: 100%;
-  height: 100vh;
+ion-content.custom-background {
+  // IMAGEM DE FUNDO: Substitua a URL da imagem por uma imagem real de céu nublado
+  --background: url('https://i.imgur.com/your-cloudy-sky-image.jpeg') no-repeat center center / cover; // Placeholder
+  position: relative; // Necessário para a sobreposição
+  --padding-top: 0;
+  --padding-bottom: 0;
+  --padding-start: 0;
+  --padding-end: 0;
+}
+
+.background-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.4); // Camada escura sobre a imagem para legibilidade
+  z-index: 1; // Garante que a sobreposição esteja acima do background, mas abaixo do conteúdo
+}
+
+.main-content {
+  position: relative;
+  z-index: 2; // Garante que o conteúdo esteja acima da sobreposição
   display: flex;
   flex-direction: column;
-  background-color: #f4f5f8; /* Fundo cinza claro */
-  overflow: auto; /* Permite scroll se o conteúdo for maior que a tela */
+  align-items: center;
+  justify-content: space-between; // Distribui o espaço entre os elementos (barra de busca, clima atual, previsão)
+  height: 100%; // Ocupa a altura total do ion-content
+  padding: 20px; // Padding geral para o conteúdo
+  box-sizing: border-box; // Inclui o padding no cálculo da altura
 }
 
-.home-card {
-  background-color: white;
-  margin: -60px auto 20px auto; /* Move o card para cima, sobrepondo o header um pouco */
-  padding: 30px 20px;
-  border-radius: 20px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-  width: calc(100% - 40px); /* Ocupa a largura total menos o padding */
-  max-width: 400px; /* Largura do card */
-  z-index: 2; /* Garante que o card fique acima do header */
-  text-align: center; /* Centraliza o texto dentro do card */
+// Estilos da Barra de Pesquisa
+.search-bar-container {
+  width: 100%;
+  max-width: 400px; // Limita a largura em telas maiores
+  margin-bottom: 40px; // Espaço abaixo da barra de busca
+  padding-top: var(--ion-safe-area-top, 20px); // Ajusta para a área segura (notch, etc.)
+  padding-left: 10px; // Ajuste para alinhar com o design
+  padding-right: 10px; // Ajuste para alinhar com o design
+  box-sizing: border-box;
 }
 
-.welcome-title {
-  font-family: 'Inter', sans-serif;
-  font-size: 1.8em;
+.custom-searchbar {
+  --background: rgba(255, 255, 255, 0.2); // Branco semi-transparente
+  --color: white; // Cor do texto
+  --placeholder-color: rgba(255, 255, 255, 0.7); // Cor do placeholder
+  --border-radius: 20px; // Cantos arredondados
+  padding: 0; // Remove padding padrão do Ionic
+  height: 48px; // Altura para alinhar com o design
+  .searchbar-input-container {
+    padding-left: 10px; // Ajusta padding do ícone
+  }
+  .searchbar-search-icon {
+    color: white;
+  }
+  .searchbar-clear-button {
+    color: white;
+  }
+}
+
+// Estilos do Display do Clima Atual
+.current-weather {
+  text-align: center;
+  color: white;
+  margin-top: auto; // Empurra para o centro/final se houver espaço
+  margin-bottom: auto; // Empurra para o centro/início se houver espaço
+}
+
+.city-name {
+  font-size: 2.2em;
   font-weight: bold;
-  color: #333;
-  margin-bottom: 15px;
+  margin-bottom: 5px;
 }
 
-.message {
-  font-size: 1em;
-  color: #555;
+.temperature {
+  font-size: 8em; // Temperatura bem grande
+  font-weight: 200; // Peso da fonte leve
+  margin: 0;
+  line-height: 1; // Ajusta a altura da linha para evitar espaços extras
+}
+
+.description {
+  font-size: 1.2em;
+  font-weight: normal;
+  margin-top: 10px;
+}
+
+// Estilos do Card de Previsão
+.forecast-card {
+  width: 100%;
+  max-width: 400px;
+  background: rgba(255, 255, 255, 0.1); // Fundo branco semi-transparente
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  margin-top: auto; // Empurra o card para o final
+  margin-bottom: 20px; // Espaço abaixo do card, se houver um botão de sair
+}
+
+.forecast-header {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  padding-bottom: 10px;
   margin-bottom: 10px;
 }
 
-.primary-button {
-  width: 100%;
-  padding: 15px;
-  background-color: #87ceeb;
+.forecast-title-container {
+  display: flex;
+  align-items: center;
+  padding-left: 10px;
+  padding-top: 5px;
+}
+
+.calendar-icon {
+  font-size: 1.4em;
   color: white;
-  border: none;
-  border-radius: 25px;
+  margin-right: 8px;
+}
+
+.forecast-title {
+  color: white;
   font-size: 1.1em;
+  font-weight: normal;
+  margin: 0;
+}
+
+.forecast-content {
+  display: flex;
+  flex-direction: column; // Empilha os dias verticalmente conforme a imagem
+  gap: 15px; // Espaço entre cada dia
+  padding: 15px;
+}
+
+.forecast-day {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; // Distribui os itens horizontalmente
+  color: white;
+  font-size: 1em;
+  padding: 0 10px;
+}
+
+.day-name {
+  flex: 1; // Ocupa espaço
+  text-align: left;
   font-weight: bold;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  margin-top: 30px; /* Espaçamento acima do botão */
 }
 
-.primary-button:hover {
-  background-color: #4a9dd6;
+.day-icon {
+  width: 40px; // Ajusta o tamanho do ícone
+  height: 40px;
+  margin: 0 10px; // Espaço em torno do ícone
+  filter: drop-shadow(0 0 2px rgba(0,0,0,0.5)); // Adiciona uma sombra para ícones claros em fundo claro
 }
 
-/* Ajustes para telas menores */
-@media (max-width: 450px) {
-  .home-card {
-    padding: 20px;
-    margin: -40px auto 20px auto; /* Ajuste para telas menores */
-  }
-  .welcome-title {
-    font-size: 1.6em;
-  }
+.temp-range {
+  display: flex;
+  gap: 8px; // Espaço entre max e min
+  flex: 1; // Ocupa espaço
+  justify-content: flex-end; // Alinha as temperaturas à direita
+}
+
+.temp-max {
+  font-weight: bold;
+  font-size: 1.1em;
+}
+
+.temp-min {
+  color: rgba(255, 255, 255, 0.7); // Cor mais suave para a temperatura mínima
+}
+
+// Estilos para mensagens de carregamento/erro
+.loading-message, .error-display {
+    color: white;
+    text-align: center;
+    margin-top: auto;
+    margin-bottom: auto;
+    p {
+        margin-top: 10px;
+    }
+}
+.error-display .error-message {
+    color: #ffcccc; // Cor mais suave para erro em fundo escuro
+    font-weight: bold;
 }

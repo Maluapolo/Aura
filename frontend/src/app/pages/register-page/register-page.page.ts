@@ -4,7 +4,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import { AlertController, LoadingController, IonicModule } from '@ionic/angular'; // <-- Adicionado IonicModule aqui
+import { AlertController, LoadingController, IonicModule } from '@ionic/angular';
 
 import { AppHeaderComponent } from '../../components/app-header/app-header.component';
 import { AuthService } from '../../services/auth/auth.service';
@@ -19,7 +19,7 @@ import { AuthService } from '../../services/auth/auth.service';
     FormsModule,
     AppHeaderComponent,
     RouterModule,
-    IonicModule // <-- DESCOMENTADO/ADICIONADO AQUI
+    IonicModule
   ],
 })
 export class RegisterPage implements OnInit {
@@ -37,7 +37,6 @@ export class RegisterPage implements OnInit {
   ) {}
 
   ngOnInit() {
-    // Lógica de redirecionamento se o usuário já estiver autenticado ao entrar nesta página
     this.authService.isAuthenticated.subscribe(isAuth => {
       if (isAuth) {
         this.router.navigateByUrl('/home', { replaceUrl: true });
@@ -46,7 +45,6 @@ export class RegisterPage implements OnInit {
   }
 
   async register() {
-    // Validações básicas
     if (!this.fullName || !this.email || !this.password || !this.confirmPassword) {
       await this.presentAlert('Erro', 'Por favor, preencha todos os campos.');
       return;
@@ -67,13 +65,12 @@ export class RegisterPage implements OnInit {
     });
     await loading.present();
 
-    // Lógica de cadastro usando AuthService
     this.authService.register(this.fullName, this.email, this.password).subscribe({
       next: async (success) => {
         await loading.dismiss();
         if (success) {
           await this.presentAlert('Sucesso', 'Sua conta foi criada com sucesso!');
-          this.router.navigateByUrl('/home', { replaceUrl: true }); // <-- MUDANÇA AQUI: Adicionado replaceUrl: true e corrigido comentário
+          this.router.navigateByUrl('/home', { replaceUrl: true });
         } else {
           await this.presentAlert('Falha no Registro', 'Não foi possível criar sua conta. Tente novamente.');
         }
@@ -81,7 +78,6 @@ export class RegisterPage implements OnInit {
       error: async (err) => {
         await loading.dismiss();
         console.error('Erro no registro Firebase:', err);
-        // Tratar erros específicos do Firebase Auth para o registro
         let errorMessage = 'Ocorreu um erro ao tentar criar sua conta. Por favor, tente novamente.';
         if (err.code === 'auth/email-already-in-use') {
           errorMessage = 'Este e-mail já está em uso. Por favor, use outro e-mail.';
@@ -96,7 +92,7 @@ export class RegisterPage implements OnInit {
   }
 
   async goToLogin() {
-    this.router.navigateByUrl('/auth'); // Navega para a página de login
+    this.router.navigateByUrl('/auth');
   }
 
   async presentAlert(header: string, message: string) {

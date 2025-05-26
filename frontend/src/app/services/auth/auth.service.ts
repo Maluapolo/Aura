@@ -3,8 +3,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, from } from 'rxjs';
 import { Router } from '@angular/router';
-// Adicione concatMap aqui
-import { map, catchError, take, concatMap } from 'rxjs/operators'; // <-- MUDANÇA AQUI
+import { map, catchError, take, concatMap } from 'rxjs/operators';
 
 // Importações do Firebase Authentication
 import {
@@ -59,6 +58,14 @@ export class AuthService {
     });
   }
 
+  // NOVO MÉTODO AQUI
+  getCurrentUserDisplayName(): string | null {
+    // Retorna o displayName do valor atual do BehaviorSubject _currentUser
+    // Se _currentUser.value for null ou se displayName for null, retorna null
+    return this._currentUser.value?.displayName || null;
+  }
+
+
   login(email: string, password: string): Observable<boolean> {
     return from(signInWithEmailAndPassword(this.auth, email, password)).pipe(
       map(userCredential => {
@@ -73,9 +80,8 @@ export class AuthService {
   }
 
   register(fullName: string, email: string, password: string): Observable<boolean> {
-    // Mude 'map' para 'concatMap' AQUI
     return from(createUserWithEmailAndPassword(this.auth, email, password)).pipe(
-      concatMap(async (userCredential) => { // <-- MUDANÇA AQUI (map para concatMap)
+      concatMap(async (userCredential) => {
         const user = userCredential.user;
 
         if (user) {
@@ -92,6 +98,7 @@ export class AuthService {
             email: user.email,
             fullName: fullName,
             createdAt: serverTimestamp()
+            // ATENÇÃO: NÃO COLOQUE O CAMPO 'password' AQUI!
           };
 
           try {
