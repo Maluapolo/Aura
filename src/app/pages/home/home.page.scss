@@ -1,361 +1,136 @@
 /* frontend/src/app/pages/home/home.page.scss */
 
-/* Reset básico para HTML puro */
-body, html {
-  margin: 0;
-  padding: 0;
-  height: 100%; /* Garante que body e html ocupem a altura total da viewport */
-  font-family: 'Inter', sans-serif; /* Usando Inter como padrão */
-  overflow-x: hidden; /* Evita rolagem horizontal */
-  box-sizing: border-box;
-}
+body, html { margin: 0; padding: 0; height: 100%; font-family: 'Inter', sans-serif; overflow-x: hidden; box-sizing: border-box; }
 
-/* Container Principal da Página (substitui ion-content) */
 .page-container {
-  min-height: 100vh; /* Garante que a página ocupe no mínimo a altura da viewport */
-  width: 100%;
-  position: relative;
-  overflow-y: auto; /* Permite rolagem vertical para o conteúdo */
-  -webkit-overflow-scrolling: touch; /* Suaviza a rolagem em iOS */
-
-  /* Estilos de fundo base - o background-image será sobrescrito pelo JS */
-  background-color: #87ceeb; /* Cor inicial azul céu claro */
-  background-size: cover;
-  background-position: center center;
-  background-repeat: no-repeat;
-  transition: background-image 1s ease-in-out, background-color 1s ease-in-out; /* Transição suave para o fundo */
-
-  padding: 20px; /* Padding geral para a página */
-  box-sizing: border-box; /* Inclui padding na largura/altura */
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start; /* Alinha o conteúdo ao topo e permite fluir para baixo */
+  min-height: 100vh; width: 100%; position: relative; overflow-y: auto; -webkit-overflow-scrolling: touch;
+  background-color: #87ceeb; background-size: cover; background-position: center center; background-repeat: no-repeat;
+  transition: background-image 1s ease-in-out, background-color 1s ease-in-out;
+  padding: 20px; box-sizing: border-box;
+  display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
 }
 
-.background-overlay {
-  position: fixed; /* Fixado para cobrir toda a viewport */
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.4); /* Camada escura sobre a imagem para legibilidade */
-  z-index: 1; /* Garante que a sobreposição esteja acima do background */
-}
+.background-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.4); z-index: 1; }
 
 .main-content {
-  position: relative;
-  z-index: 2; /* Garante que o conteúdo esteja acima da sobreposição */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  max-width: 400px; /* Limita a largura do conteúdo em telas maiores */
-  padding: 0; /* O padding já está no .page-container */
-  box-sizing: border-box;
+  position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center;
+  width: 100%; max-width: 400px; padding: 0; box-sizing: border-box;
 }
 
-/* Estilos da Barra de Pesquisa (div.custom-searchbar com input e button) */
-.search-bar-container {
-  width: 100%;
-  margin-bottom: 20px;
-  padding-top: 20px; /* Ajuste para a área segura (notch, etc.) */
-}
+.search-bar-container { width: 100%; margin-bottom: 20px; padding-top: 20px; }
 
 .custom-searchbar {
-  display: flex;
-  align-items: center;
-  background: rgba(255, 255, 255, 0.15); /* Branco semi-transparente */
-  border-radius: 25px; /* Mais arredondado */
-  height: 50px; /* Altura para alinhar com o design */
-  padding: 0 15px; /* Padding interno para o ícone e texto */
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); /* Sombra suave */
-  backdrop-filter: blur(5px); /* Efeito de vidro fosco */
-  -webkit-backdrop-filter: blur(5px); /* Compatibilidade Safari */
-  border: 1px solid rgba(255, 255, 255, 0.2); /* Borda sutil */
+  display: flex; align-items: center; background: rgba(255, 255, 255, 0.15);
+  border-radius: 25px; height: 50px; padding: 0 15px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .search-input {
-  flex-grow: 1;
-  background: transparent;
-  border: none;
-  outline: none;
-  color: white;
-  font-size: 1.1em; /* Um pouco maior */
-  padding: 0 10px;
-  height: 100%; /* Ocupa a altura do container */
-}
-
-.search-input::placeholder {
-  color: rgba(255, 255, 255, 0.7);
+  flex-grow: 1; background: transparent; border: none; outline: none; color: white;
+  font-size: 1.1em; padding: 0 10px; height: 100%;
+  &::placeholder { color: rgba(255, 255, 255, 0.7); }
 }
 
 .search-icon-button {
-  background: none;
-  border: none;
-  color: white;
-  font-size: 1.5em; /* Tamanho do ícone */
-  cursor: pointer;
-  padding: 0;
-  transition: transform 0.2s ease-in-out;
+  background: none; border: none; color: white; font-size: 1.5em;
+  cursor: pointer; padding: 0; transition: transform 0.2s ease-in-out;
+  &:active { transform: scale(0.9); }
 }
 
-.search-icon-button:active {
-  transform: scale(0.9);
-}
-
-
-/* Estilos dos Botões (Usar Minha Localização, Sair da Conta) */
-.location-button,
-.logout-button,
-.history-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  padding: 12px 20px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 25px; /* Cantos arredondados */
-  font-weight: 600; /* Mais negrito */
-  text-transform: none; /* Sem uppercase */
-  color: white;
+.location-button, .logout-button, .history-button {
+  display: flex; align-items: center; justify-content: center;
+  width: 100%; padding: 12px 20px; border-radius: 25px;
+  font-weight: 600; text-transform: none; color: white;
   border: 1px solid rgba(255, 255, 255, 0.2);
-  cursor: pointer;
-  transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out, transform 0.2s ease-in-out;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); /* Sombra para o botão */
+  cursor: pointer; transition: all 0.2s ease-in-out;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  &:hover { transform: translateY(-2px); }
 }
 
-.location-button:hover,
-.logout-button:hover,
-.history-button:hover {
-  transform: translateY(-2px); /* Pequeno efeito de levantamento */
-}
-
-
-.location-button {
-  margin-top: 15px; /* Espaço abaixo da searchbar */
-}
+.location-button { margin-top: 15px; background: rgba(255, 255, 255, 0.1); }
 
 .history-button {
-    margin: 20px 0px;
+  margin-top: 20px; margin-bottom: 20px;
+  background: linear-gradient(90deg, rgba(100, 149, 237, 0.4), rgba(70, 130, 180, 0.4));
+  border-color: rgba(100, 149, 237, 0.6);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+  &:hover { background: linear-gradient(90deg, rgba(100, 149, 237, 0.6), rgba(70, 130, 180, 0.6)); border-color: rgba(100, 149, 237, 0.8); }
 }
 
+.logout-button { margin-top: 40px; margin-bottom: 40px; background: rgba(255, 255, 255, 0.1); }
 
-.logout-button {
-  margin-top: 40px; /* Mais espaço para o botão de sair */
-  margin-bottom: 40px; /* Garante que há espaço para rolagem abaixo do botão */
-}
+.location-button i, .logout-button i, .history-button i { font-size: 1.4em; margin-right: 10px; color: inherit; }
 
-.location-button i,
-.logout-button i,
-.history-button i {
-  font-size: 1.4em; /* Tamanho do ícone */
-  margin-right: 10px;
-  color: inherit;
-}
+.current-weather { text-align: center; color: white; margin: 40px 0; width: 100%; }
 
-/* Estilos do Display do Clima Atual */
-.current-weather {
-  text-align: center;
-  color: white;
-  margin-top: 40px;
-  margin-bottom: 40px;
-  width: 100%;
-}
+.city-name { font-size: 2.5em; font-weight: bold; margin-bottom: 10px; text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3); }
 
-.city-name {
-  font-size: 2.5em; /* Um pouco maior */
-  font-weight: bold;
-  margin-bottom: 10px;
-  text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3); /* Sombra para o texto da cidade */
-}
+.temperature { font-size: 9em; font-weight: 100; margin: 0; line-height: 1; text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.4); }
 
-.temperature {
-  font-size: 9em; /* Temperatura ainda maior */
-  font-weight: 100; /* Mais leve */
-  margin: 0;
-  line-height: 1;
-  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.4); /* Sombra para a temperatura */
-}
-
-.description {
-  font-size: 1.3em;
-  font-weight: normal;
-  margin-top: 15px;
-  margin-bottom: 25px;
-}
+.description { font-size: 1.3em; font-weight: normal; margin-top: 15px; margin-bottom: 25px; }
 
 .additional-weather-details {
-  margin-top: 30px;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 15px 40px; /* Maior espaçamento */
-  max-width: 350px; /* Um pouco mais largo */
-  margin-left: auto;
-  margin-right: auto;
-  padding: 10px;
-  border-top: 1px solid rgba(255, 255, 255, 0.2);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  margin-top: 30px; display: flex; flex-wrap: wrap; justify-content: center;
+  gap: 15px 40px; max-width: 350px; margin-left: auto; margin-right: auto;
+  padding: 10px; border-top: 1px solid rgba(255, 255, 255, 0.2); border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  p { margin: 0; font-size: 1em; color: rgba(255, 255, 255, 0.9); flex-basis: calc(50% - 20px); text-align: center; }
 }
 
-.additional-weather-details p {
-  margin: 0;
-  font-size: 1em;
-  color: rgba(255, 255, 255, 0.9); /* Cor mais visível */
-  flex-basis: calc(50% - 20px); /* Ajuste o flex-basis para espaçamento */
-  text-align: center;
-}
-
-/* Estilos para mensagens de carregamento/erro */
-.text-center {
-  text-align: center;
-}
+.text-center { text-align: center; }
 
 .loading-message, .error-display {
-    color: white;
-    text-align: center;
-    margin-top: 60px; /* Mais espaço para centralizar */
-    margin-bottom: 60px;
-    p {
-        margin-top: 15px;
-        font-size: 1.1em;
-    }
+    color: white; text-align: center; margin: 60px 0;
+    p { margin-top: 15px; font-size: 1.1em; }
 }
-.error-display .error-message {
-    color: #ffb3b3; /* Um vermelho mais suave */
-    font-weight: bold;
-    font-size: 1.2em;
-}
+.error-display .error-message { color: #ffb3b3; font-weight: bold; font-size: 1.2em; }
 
-/* Spinner CSS puro (melhorado visualmente) */
 .spinner {
-  border: 5px solid rgba(255, 255, 255, 0.3);
-  border-top: 5px solid #fff;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  animation: spin 1s linear infinite;
-  margin: 0 auto 15px auto;
-  box-shadow: 0 0 10px rgba(255, 255, 255, 0.3); /* Brilho no spinner */
+  border: 5px solid rgba(255, 255, 255, 0.3); border-top: 5px solid #fff; border-radius: 50%;
+  width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 0 auto 15px auto;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
 }
 
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-
-/* Card de Previsão (div.forecast-card) */
 .forecast-card {
-  width: 100%;
-  max-width: 400px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 20px; /* Mais arredondado */
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); /* Sombra mais forte */
-  margin-top: 40px;
-  margin-bottom: 40px;
-  backdrop-filter: blur(8px); /* Efeito de vidro fosco mais forte */
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.3); /* Borda mais visível */
-  overflow: hidden; /* Garante que o conteúdo não vaze */
+  width: 100%; max-width: 400px; background: rgba(255, 255, 255, 0.1);
+  border-radius: 20px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  margin: 40px 0; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.3); overflow: hidden;
 }
 
-.forecast-header {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.3); /* Borda mais visível */
-  padding: 15px 20px; /* Aumentar padding */
-}
+.forecast-header { border-bottom: 1px solid rgba(255, 255, 255, 0.3); padding: 15px 20px; }
 
-.forecast-title-container {
-  display: flex;
-  align-items: center;
-}
+.forecast-title-container { display: flex; align-items: center; }
 
-.calendar-icon {
-  font-size: 1.6em; /* Ícone maior */
-  color: white;
-  margin-right: 12px; /* Maior espaçamento */
-  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
-}
+.calendar-icon { font-size: 1.6em; color: white; margin-right: 12px; text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2); }
 
-.forecast-title {
-  color: white;
-  font-size: 1.2em;
-  font-weight: 600; /* Mais negrito */
-  margin: 0;
-  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
-}
+.forecast-title { color: white; font-size: 1.2em; font-weight: 600; margin: 0; text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2); }
 
-.forecast-content {
-  display: flex;
-  flex-direction: column;
-  gap: 20px; /* Maior espaço entre os dias */
-  padding: 20px;
-}
+.forecast-content { display: flex; flex-direction: column; gap: 20px; padding: 20px; }
 
 .forecast-day {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  color: white;
-  font-size: 1.1em; /* Texto maior */
-  padding: 5px 10px;
-  border-radius: 10px;
-  background: rgba(255, 255, 255, 0.05); /* Fundo sutil para cada dia */
-  transition: background-color 0.2s ease-in-out;
+  display: flex; align-items: center; justify-content: space-between; color: white;
+  font-size: 1.1em; padding: 5px 10px; border-radius: 10px;
+  background: rgba(255, 255, 255, 0.05); transition: background-color 0.2s ease-in-out;
+  &:hover { background: rgba(255, 255, 255, 0.15); }
 }
 
-.forecast-day:hover {
-  background: rgba(255, 255, 255, 0.15);
-}
+.day-name { flex: 1; text-align: left; font-weight: bold; }
 
-.day-name {
-  flex: 1;
-  text-align: left;
-  font-weight: bold;
-}
+.day-icon { width: 50px; height: 50px; margin: 0 15px; filter: drop-shadow(2px 2px 5px rgba(0,0,0,0.4)); }
 
-.day-icon {
-  width: 50px; /* Ícone de clima maior */
-  height: 50px;
-  margin: 0 15px; /* Maior espaçamento */
-  filter: drop-shadow(2px 2px 5px rgba(0,0,0,0.4)); /* Sombra mais pronunciada */
-}
+.temp-range { display: flex; gap: 10px; flex: 1; justify-content: flex-end; font-weight: 600; }
 
-.temp-range {
-  display: flex;
-  gap: 10px;
-  flex: 1;
-  justify-content: flex-end;
-  font-weight: 600;
-}
+.temp-max { font-size: 1.2em; }
 
-.temp-max {
-  font-size: 1.2em; /* Maior */
-}
+.temp-min { color: rgba(255, 255, 255, 0.6); }
 
-.temp-min {
-  color: rgba(255, 255, 255, 0.6); /* Cor mais suave */
-}
-
-/* Responsividade Básica (para telas menores) */
 @media (max-width: 600px) {
-  .page-container {
-    padding: 15px;
-  }
-  .search-bar-container,
-  .location-button,
-  .current-weather,
-  .forecast-card,
-  .logout-button,
-  .history-button {
-    max-width: 100%; /* Ocupa largura total em telas pequenas */
-  }
-  .temperature {
-    font-size: 7em;
-  }
-  .city-name {
-    font-size: 2em;
-  }
+  .page-container { padding: 15px; }
+  .search-bar-container, .location-button, .current-weather, .forecast-card, .logout-button, .history-button { max-width: 100%; }
+  .temperature { font-size: 7em; }
+  .city-name { font-size: 2em; }
 }
