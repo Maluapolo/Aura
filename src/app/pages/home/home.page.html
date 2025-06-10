@@ -1,0 +1,76 @@
+<!-- frontend/src/app/pages/home/home.page.html -->
+
+<!-- O fundo será aplicado dinamicamente via [style.background] no TypeScript -->
+<div class="page-container" [style.background]="dynamicBackground">
+  <!-- O overlay permanece aqui para escurecer a imagem/cor de fundo -->
+  <div class="background-overlay"></div>
+
+  <div class="main-content">
+    <div class="search-bar-container">
+      <div class="custom-searchbar">
+        <input
+          type="text"
+          placeholder="Pesquisar cidade..."
+          [(ngModel)]="city"
+          (keyup.enter)="getWeatherByCity()"
+          class="search-input"
+        />
+        <button class="search-icon-button" (click)="getWeatherByCity()">
+          <i class="bi bi-search"></i>
+        </button>
+      </div>
+    </div>
+
+    <button class="location-button" (click)="getWeatherByCurrentLocation()" [disabled]="isLoadingWeather">
+      <i class="bi bi-geo-alt"></i>
+      Usar Minha Localização
+    </button>
+
+    <div class="current-weather" *ngIf="weatherData && !isLoadingWeather && !weatherError">
+      <h2 class="city-name">{{ weatherData.name }}</h2>
+      <h1 class="temperature">{{ weatherData.main.temp.toFixed(0) }}°</h1>
+      <p class="description">{{ weatherData.weather[0].description | titlecase }} {{ weatherData.main.temp_max.toFixed(0) }}°/{{ weatherData.main.temp_min.toFixed(0) }}°</p>
+
+      <div class="additional-weather-details">
+        <p>Humidade: {{ weatherData.main.humidity }}%</p>
+        <p>Pressão: {{ weatherData.main.pressure }} hPa</p>
+        <p>Vento: {{ weatherData.wind.speed.toFixed(1) }} m/s</p>
+        <p>Nuvens: {{ weatherData.clouds.all }}%</p>
+      </div>
+    </div>
+
+    <div *ngIf="isLoadingWeather" class="text-center loading-message">
+      <div class="spinner"></div>
+      <p>Carregando clima...</p>
+    </div>
+
+    <div *ngIf="weatherError" class="text-center error-display">
+      <p class="error-message">{{ weatherError }}</p>
+    </div>
+
+    <div class="forecast-card" *ngIf="forecastData && forecastData.length > 0">
+      <div class="forecast-header">
+        <div class="forecast-title-container">
+          <i class="bi bi-calendar-event calendar-icon"></i>
+          <h3 class="forecast-title">Previsão para 3 dias</h3>
+        </div>
+      </div>
+      <div class="forecast-content">
+        <div class="forecast-day" *ngFor="let day of forecastData">
+          <span class="day-name">{{ day.name }}</span>
+          <img [src]="'http://openweathermap.org/img/wn/' + day.icon + '@2x.png'" alt="Weather Icon" class="day-icon">
+          <div class="temp-range">
+            <span class="temp-max">{{ day.maxTemp.toFixed(0) }}°</span>
+            <span class="temp-min">{{ day.minTemp.toFixed(0) }}°</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <button class="logout-button" (click)="logout()">
+      <i class="bi bi-box-arrow-right"></i>
+      Sair da Conta
+    </button>
+
+  </div>
+</div>
