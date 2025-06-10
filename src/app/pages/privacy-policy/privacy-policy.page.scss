@@ -1,0 +1,136 @@
+/* frontend/src/app/pages/privacy-policy/privacy-policy.page.scss */
+
+:host {
+  width: 100%;
+  background-color: #f4f5f8; /* Fundo cinza claro */
+  font-family: 'Inter', sans-serif;
+  color: #333; /* Cor padr\u00E3o do texto */
+  box-sizing: border-box;
+  padding: 20px; /* Padding geral para a viewport */
+  overflow-y: auto; /* Permite rolagem vertical se o conte\u00FAdo for muito longo */
+}
+
+.page-container {
+  width: 100%;
+  max-width: 760px; /* Aumentado um pouco a largura m\u00E1xima para mais legibilidade */
+  background-color: white;
+  border-radius: 15px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1); /* Sombra mais suave e elegante */
+  padding: 35px; /* Aumentado o padding interno do card */
+  box-sizing: border-box;
+  margin: 0 auto; /* Centraliza o card na p\u00E1gina */
+  margin-top: 30px; /* Espa\u00E7amento superior para n\u00E3o colar no topo */
+  margin-bottom: 30px; /* Espa\u00E7amento inferior */
+}
+
+.header-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #e0e0e0; /* Borda mais suave */
+}
+
+.page-title {
+  font-size: 2.5em; /* T\u00EDtulo maior */
+  font-weight: 700; /* Mais negrito */
+  color: #333;
+  margin: 0;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); /* Sombra de texto suave */
+}
+
+.back-button {
+  background: none;
+  border: none;
+  color: #666;
+  font-size: 2em; /* \u00CDcone de fechar maior */
+  cursor: pointer;
+  transition: color 0.2s ease-in-out, transform 0.2s ease-in-out;
+
+  &:hover {
+    color: #333;
+    transform: rotate(90deg); /* Efeito de giro sutil ao passar o mouse */
+  }
+}
+
+.content-card {
+  h2 {
+    font-size: 1.8em; /* T\u00EDtulos de se\u00E7\u00E3o maiores */
+    color: #444;
+    margin-top: 35px; /* Mais espa\u00E7amento antes dos h2 */
+    margin-bottom: 12px;
+    font-weight: 600;
+  }
+
+  p {
+    font-size: 1.05em; /* Texto um pouco maior para leitura */
+    line-height: 1.7; /* Mais espa\u00E7amento entre linhas */
+    margin-bottom: 18px;
+    color: #444;
+  }
+
+  ul {
+    margin-left: 25px; /* Mais indentado */
+    margin-bottom: 20px;
+    color: #444;
+    list-style-type: disc; /* Garante marcadores de disco */
+    padding-left: 0; /* Remove padding padr\u00E3o de alguns navegadores */
+
+    li {
+      font-size: 1.0em;
+      line-height: 1.6;
+      margin-bottom: 8px; /* Espa\u00E7amento entre itens da lista */
+    }
+  }
+
+  .last-updated {
+    font-size: 0.9em;
+    text-align: right;
+    color: #888;
+    margin-top: 40px; /* Mais espa\u00E7amento para a data de atualiza\u00E7\u00E3o */
+    font-style: italic;
+  }
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .page-container {
+    padding: 15px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+  }
+  .page-title {
+    font-size: 2em;
+  }
+  .content-card {
+    padding: 25px;
+    h2 {
+      font-size: 1.6em;
+    }
+    p, ul, li {
+      font-size: 0.95em;
+    }
+  }
+  .back-button {
+    font-size: 1.5em;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-container {
+    padding: 10px;
+  }
+  .page-title {
+    font-size: 1.8em;
+  }
+  .content-card {
+    padding: 20px;
+    h2 {
+      font-size: 1.4em;
+    }
+    p, ul, li {
+      font-size: 0.9em;
+    }
+  }
+}

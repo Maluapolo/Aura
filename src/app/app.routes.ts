@@ -32,7 +32,11 @@ export const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
+    path: 'privacy-policy', // <--- NOVA ROTA PARA A P\u00C1GINA DE PRIVACIDADE
+    loadComponent: () => import('./pages/privacy-policy/privacy-policy.page').then(m => m.PrivacyPolicyPage)
+  },
+  {
     path: '**',
     redirectTo: 'auth'
-  }
+  },
 ];

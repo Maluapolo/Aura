@@ -29,31 +29,37 @@
       />
     </div>
 
-    <div class="input-group">
+        <div class="input-group"> <!-- ADICIONADO: 'position: relative;' via CSS para este input-group -->
       <label for="password-input">Senha</label>
       <input
-        type="password"
+        [type]="passwordVisible ? 'text' : 'password'"
         id="password-input"
         placeholder=""
         [(ngModel)]="password"
         required
       />
+      <button type="button" class="toggle-password" (click)="togglePasswordVisibility()">
+        <i class="bi" [class.bi-eye-fill]="!passwordVisible" [class.bi-eye-slash-fill]="passwordVisible"></i>
+      </button>
     </div>
 
-    <div class="input-group">
+    <div class="input-group"> <!-- ADICIONADO: 'position: relative;' via CSS para este input-group -->
       <label for="confirm-password-input">Repetir senha</label>
       <input
-        type="password"
+        [type]="confirmPasswordVisible ? 'text' : 'password'"
         id="confirm-password-input"
         placeholder=""
         [(ngModel)]="confirmPassword"
         required
       />
+      <button type="button" class="toggle-password" (click)="toggleConfirmPasswordVisibility()">
+        <i class="bi" [class.bi-eye-fill]="!confirmPasswordVisible" [class.bi-eye-slash-fill]="confirmPasswordVisible"></i>
+      </button>
     </div>
 
     <div class="terms-checkbox">
       <input type="checkbox" id="agree-terms" [(ngModel)]="agreeTerms" />
-      <label for="agree-terms">Eu concordo com os <a href="#" class="terms-link">Termos de privacidade</a></label>
+      <label for="agree-terms">Eu concordo com os <a routerLink="/privacy-policy" class="terms-link">Termos de privacidade</a></label>
     </div>
 
     <button class="primary-button" (click)="register()">

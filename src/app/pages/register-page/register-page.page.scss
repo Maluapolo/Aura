@@ -1,4 +1,4 @@
-/* Estilos para a página de registro */
+/* Estilos para a p\u00E1gina de registro */
 
 .page-container {
   width: 100%;
@@ -6,10 +6,11 @@
   display: flex;
   flex-direction: column;
   background-color: #f4f5f8; /* Fundo cinza claro */
-  overflow: auto; /* Permite scroll se o conteúdo for maior que a tela */
+  overflow: auto; /* Permite scroll se o conte\u00FAdo for maior que a tela */
+  font-family: 'Inter', sans-serif; /* Garante a fonte em toda a p\u00E1gina */
 }
 
-/* O .header-container do AppHeaderComponent já define a altura e o estilo superior */
+/* O .header-container do AppHeaderComponent j\u00E1 define a altura e o estilo superior */
 
 .register-card {
   background-color: white;
@@ -25,7 +26,7 @@
 
 .title-text-register {
   text-align: center;
-  margin-bottom: 30px; /* Espaço abaixo do título de registro */
+  margin-bottom: 30px; /* Espa\u00E7o abaixo do t\u00EDtulo de registro */
 
   p {
     font-size: 1.2em;
@@ -43,6 +44,7 @@
 
 .input-group {
   margin-bottom: 20px;
+  position: relative; /* <--- ADICIONADO: Essencial para posicionar o olhinho */
 
   label {
     display: block;
@@ -51,9 +53,7 @@
     margin-bottom: 5px;
   }
 
-  input[type="text"],
-  input[type="email"],
-  input[type="password"] {
+  input { /* <--- Alterado para o seletor geral de input dentro de input-group */
     width: 100%;
     padding: 12px 15px;
     border: 1px solid #c0e6f7; /* Cor da borda mais clara, similar ao design */
@@ -62,6 +62,7 @@
     background-color: #f0f0f0;
     box-sizing: border-box;
     color: black;
+    padding-right: 45px; /* <--- ADICIONADO: Espa\u00E7o para o \u00EDcone */
 
     &:focus {
       outline: none;
@@ -71,11 +72,33 @@
   }
 }
 
+/* NOVO BLOCO DE ESTILO: Para o bot\u00E3o de toggle de senha */
+.toggle-password {
+  position: absolute;
+  right: 15px; /* Alinha \u00E0 direita do input */
+  top: 22%; /* Centraliza verticalmente em rela\u00E7\u00E3o ao input-group */
+  transform: translateY(50%); /* Ajusta a posi\u00E7\u00E3o para ficar no meio da altura do campo de input */
+  background: none;
+  border: none;
+  color: #777; /* Cor do \u00EDcone no tema claro */
+  cursor: pointer;
+  font-size: 1.2em; /* Tamanho do \u00EDcone */
+  transition: color 0.2s ease;
+  padding: 5px; /* Adiciona padding para uma \u00E1rea de clique maior */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    color: #555; /* Cor ao passar o mouse */
+  }
+}
+
 .terms-checkbox {
   display: flex;
   align-items: center;
   margin-top: 15px;
-  margin-bottom: 30px; /* Espaço antes do botão */
+  margin-bottom: 30px; /* Espa\u00E7o antes do bot\u00E3o */
   font-size: 0.9em;
 
   input[type="checkbox"] {
@@ -135,6 +158,24 @@
   }
 }
 
+/* Spinner CSS puro (melhorado visualmente) */
+.spinner {
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-top: 3px solid #fff;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  animation: spin 1s linear infinite;
+  display: inline-block;
+  vertical-align: middle;
+  margin: 0 auto;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
 /* Opcional: Ajustes para telas muito pequenas */
 @media (max-width: 480px) {
   .register-card {
@@ -143,5 +184,8 @@
   }
   .title-text-register h1 {
     font-size: 1.8em;
+  }
+  .primary-button, .login-link-container {
+    font-size: 1em;
   }
 }

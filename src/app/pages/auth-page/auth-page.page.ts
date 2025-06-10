@@ -6,9 +6,8 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule, AlertController, LoadingController } from '@ionic/angular';
 import { Router, RouterModule } from '@angular/router';
 
-// Importe o componente de cabeçalho
 import { AppHeaderComponent } from '../../components/app-header/app-header.component';
-import { AuthService } from '../../services/auth/auth.service'; // AGORA DESCOMENTADO
+import { AuthService } from '../../services/auth/auth.service';
 
 @Component({
   selector: 'app-auth-page',
@@ -16,7 +15,7 @@ import { AuthService } from '../../services/auth/auth.service'; // AGORA DESCOME
   styleUrls: ['./auth-page.page.scss'],
   standalone: true,
   imports: [
-    IonicModule, // Certifique-se de que IonicModule está aqui se você usa componentes Ionic no HTML
+    IonicModule,
     CommonModule,
     FormsModule,
     AppHeaderComponent,
@@ -26,16 +25,16 @@ import { AuthService } from '../../services/auth/auth.service'; // AGORA DESCOME
 export class AuthPage implements OnInit {
   email: string = '';
   password: string = '';
+  passwordVisible: boolean = false; // <--- Certifique-se que esta propriedade est\u00E1 aqui e inicializada como false
 
   constructor(
     private alertCtrl: AlertController,
     private loadingCtrl: LoadingController,
     private router: Router,
-    private authService: AuthService // AGORA DESCOMENTADO E INJETADO
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
-    // Opcional: Redirecionar se o usuário já estiver autenticado
     this.authService.isAuthenticated.subscribe(isAuth => {
       if (isAuth) {
         this.router.navigateByUrl('/home', { replaceUrl: true });
@@ -44,7 +43,6 @@ export class AuthPage implements OnInit {
   }
 
   async login() {
-    // Validação de campos
     if (!this.email || !this.password) {
       await this.presentAlert('Erro', 'Por favor, preencha todos os campos.');
       return;
@@ -53,27 +51,23 @@ export class AuthPage implements OnInit {
     const loading = await this.loadingCtrl.create({ message: 'Entrando...', });
     await loading.present();
 
-    // Lógica de login AGORA USANDO AuthService
     this.authService.login(this.email, this.password).subscribe({
       next: async (success) => {
         await loading.dismiss();
         if (success) {
           await this.presentAlert('Sucesso', 'Login realizado com sucesso!');
-          this.router.navigateByUrl('/home', { replaceUrl: true }); // Redireciona para a página principal do app
         } else {
-          // O AuthService já deve lidar com erros e retornar false, mas aqui é um fallback
           await this.presentAlert('Erro', 'E-mail ou senha incorretos. Tente novamente.');
         }
       },
       error: async (err) => {
         await loading.dismiss();
         console.error('Erro no login:', err);
-        // Firebase Auth retorna erros específicos, você pode refinar a mensagem aqui
         let errorMessage = 'Ocorreu um erro ao tentar fazer login. Por favor, tente novamente.';
-        if (err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password') {
+        if (err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential') {
           errorMessage = 'E-mail ou senha incorretos.';
         } else if (err.code === 'auth/invalid-email') {
-          errorMessage = 'O formato do e-mail é inválido.';
+          errorMessage = 'O formato do e-mail \u00E9 inv\u00E1lido.';
         }
         await this.presentAlert('Erro', errorMessage);
       }
@@ -81,9 +75,8 @@ export class AuthPage implements OnInit {
   }
 
   async createAccount() {
-    // Redirecionar para a página de registro
     this.router.navigateByUrl('/register');
-    console.log('Redirecionando para a página de registro');
+    console.log('Redirecionando para a p\u00E1gina de registro');
   }
 
   async presentAlert(header: string, message: string) {
@@ -93,5 +86,9 @@ export class AuthPage implements OnInit {
       buttons: ['OK'],
     });
     await alert.present();
+  }
+
+  togglePasswordVisibility() { // <--- Certifique-se que este m\u00E9todo est\u00E1 aqui
+    this.passwordVisible = !this.passwordVisible;
   }
 }

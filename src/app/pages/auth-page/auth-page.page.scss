@@ -1,26 +1,30 @@
+/* frontend/src/app/pages/auth-page/auth-page.page.scss */
+
 .page-container {
   width: 100%;
   height: 100vh;
   display: flex;
   flex-direction: column;
-  background-color: #f4f5f8;
+  background-color: #f4f5f8; /* Fundo mais claro */
   overflow: auto;
+  font-family: 'Inter', sans-serif; /* Garante a fonte em toda a p\u00E1gina */
 }
 
 .auth-card {
   background-color: white;
-  margin: -60px auto 20px auto;
+  margin: -60px auto 20px auto; /* Mantido o ajuste de margem */
   padding: 30px 20px;
   border-radius: 20px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
   width: calc(100% - 40px);
   max-width: 400px;
   z-index: 2;
-  position: relative;
+  position: relative; /* Mantido relative para contexto de empilhamento */
 }
 
 .input-group {
   margin-bottom: 20px;
+  position: relative; /* <--- ADICIONADO: Essencial para posicionar o olhinho */
 
   label {
     display: block;
@@ -38,6 +42,7 @@
     background-color: #f0f0f0;
     box-sizing: border-box;
     color: black;
+    padding-right: 45px; /* <--- ADICIONADO: Espa\u00E7o para o \u00EDcone */
 
     &:focus {
       outline: none;
@@ -46,6 +51,29 @@
     }
   }
 }
+
+/* NOVO BLOCO DE ESTILO: Para o bot\u00E3o de toggle de senha */
+.toggle-password {
+  position: absolute;
+  right: 15px; /* Alinha \u00E0 direita do input */
+  top: 22%; /* Centraliza verticalmente em rela\u00E7\u00E3o ao input-group */
+  transform: translateY(50%); /* Ajusta a posi\u00E7\u00E3o para ficar no meio da altura do campo de input */
+  background: none;
+  border: none;
+  color: #777; /* Cor do \u00EDcone no tema claro */
+  cursor: pointer;
+  font-size: 1.2em; /* Tamanho do \u00EDcone */
+  transition: color 0.2s ease;
+  padding: 5px; /* Adiciona padding para uma \u00E1rea de clique maior */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    color: #555; /* Cor ao passar o mouse */
+  }
+}
+
 
 .primary-button {
   width: 100%;
@@ -117,7 +145,7 @@
   }
 }
 
-/* Opcional: Ajustes básicos para telas menores */
+/* Opcional: Ajustes b\u00E1sicos para telas menores */
 @media (max-width: 480px) {
   .auth-card {
     margin-top: -40px;

@@ -1,0 +1,41 @@
+<!-- frontend/src/app/pages/privacy-policy/privacy-policy.page.html -->
+
+<div class="page-container">
+  <div class="header-section">
+    <h1 class="page-title">Termos de Privacidade</h1>
+    <button class="back-button" (click)="goBack()">
+      <i class="bi bi-x-lg"></i> <!-- \u00CDcone de fechar do Bootstrap -->
+    </button>
+  </div>
+
+  <div class="content-card">
+    <p>Bem-vindo aos nossos Termos de Privacidade. A sua privacidade é de extrema importância para nós.</p>
+
+    <h2>1. Coleta de Dados</h2>
+    <p>Coletamos apenas os dados estritamente necessários para o funcionamento do serviço, como informações de autenticação (e-mail, senha criptografada) e seu histórico de buscas de cidades para melhorar a sua experiência e a funcionalidade do aplicativo. Não coletamos dados sensíveis ou não essenciais.</p>
+
+    <h2>2. Uso dos Dados</h2>
+    <p>Os dados coletados são utilizados unicamente para:</p>
+    <ul>
+      <li>Fornecer os serviços de previsão do tempo.</li>
+      <li>Personalizar a sua experiência (ex: histórico de busca).</li>
+      <li>Melhorar e otimizar as funcionalidades do aplicativo.</li>
+      <li>Análise interna de dados agregados para identificar cidades populares e tendências de busca.</li>
+    </ul>
+
+
+    <h2>3. Compartilhamento de Dados</h2>
+    <p>Não compartilhamos, vendemos ou alugamos suas informações pessoais com terceiros para fins de marketing ou qualquer outro propósito não essencial ao funcionamento do serviço. Dados agregados e anonimizados (que não identificam você pessoalmente) podem ser utilizados para análises estatísticas.</p>
+
+    <h2>4. Segurança dos Dados</h2>
+    <p>Implementamos medidas de segurança rigorosas para proteger suas informações contra acesso não autorizado, alteração, divulgação ou destruição. Utilizamos o Firebase para autenticação e armazenamento de dados, o que oferece robustas funcionalidades de segurança.</p>
+
+    <h2>5. Seus Direitos</h2>
+    <p>Você tem o direito de acessar, corrigir ou excluir seus dados pessoais a qualquer momento. Para exercer esses direitos, entre em contato conosco através das opções disponíveis no aplicativo (se houver) ou através do suporte.</p>
+
+    <h2>6. Alterações a esta Política</h2>
+    <p>Esta Política de Privacidade pode ser atualizada periodicamente. Notificaremos você sobre quaisquer alterações significativas através do aplicativo ou por e-mail.</p>
+
+    <p class="last-updated"><em>Epoca da última atualização: {{ lastUpdatedDate }}</em></p>
+  </div>
+</div>
