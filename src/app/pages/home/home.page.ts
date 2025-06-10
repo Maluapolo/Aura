@@ -6,12 +6,13 @@ import { FormsModule } from '@angular/forms';
 
 import { AuthService } from '../../services/auth/auth.service';
 import { WeatherService } from '../../services/weather/weather.service';
-import { Router } from '@angular/router';
 import { Geolocation } from '@capacitor/geolocation';
+import { Router, ActivatedRoute, RouterModule } from '@angular/router';
+import { SearchService } from '../../services/search/search.service';
 
-// Opcional: Interface para tipar os dados da previsão diária
+// Opcional: Interface para tipar os dados da previs\u00E3o di\u00E1ria
 interface DailyForecast {
-  name: string; // Ex: "Hoje", "Amanhã", "Sex."
+  name: string; // Ex: "Hoje", "Amanh\u00E3", "Sex."
   icon: string; // Ex: "04d"
   maxTemp: number;
   minTemp: number;
@@ -24,7 +25,9 @@ interface DailyForecast {
   standalone: true,
   imports: [
     CommonModule,
-    FormsModule
+    FormsModule,
+    RouterModule // Mantenha RouterModule aqui
+    // REMOVIDOS: ActivatedRoute e SearchService. Eles s\u00E3o injetados no construtor, n\u00E3o importados aqui.
   ],
 })
 export class HomePage implements OnInit {
@@ -38,20 +41,30 @@ export class HomePage implements OnInit {
   isLoadingForecast: boolean = false;
   forecastError: string | null = null;
 
-  // Propriedade para o fundo dinâmico
-  dynamicBackground: string = 'linear-gradient(135deg, #87ceeb, #4682B4)'; // Cor inicial azul céu claro (um gradiente para melhor visual)
+  // Propriedade para o fundo din\u00E2mico
+  dynamicBackground: string = 'linear-gradient(135deg, #87ceeb, #4682B4)'; // Cor inicial azul c\u00E9u claro (um gradiente para melhor visual)
 
   constructor(
     private authService: AuthService,
     private router: Router,
     private weatherService: WeatherService,
+    private searchService: SearchService,
+    private activatedRoute: ActivatedRoute
   ) {}
 
   ngOnInit() {
     this.currentUserDisplayName = this.authService.getCurrentUserDisplayName();
-    // Você pode definir uma cidade padrão para carregar o clima ao iniciar
-    // this.city = 'Rio de Janeiro';
-    // this.getWeatherByCity(); // Comente ou descomente conforme a necessidade
+
+    this.activatedRoute.queryParams.subscribe(params => {
+      const cityFromHistory = params['city'];
+      if (cityFromHistory && cityFromHistory !== this.city) {
+        this.city = cityFromHistory;
+        this.getWeatherByCity(); // Busca o clima para a cidade do hist\u00F3rico
+      } else if (!this.city) {
+        // Opcional: Carregar clima da localiza\u00E7\u00E3o atual ao iniciar, se a cidade n\u00E3o estiver definida
+        // this.getWeatherByCurrentLocation();
+      }
+    });
   }
 
   async logout() {
@@ -69,20 +82,21 @@ export class HomePage implements OnInit {
     this.weatherError = null;
     this.weatherData = null;
     this.forecastData = null;
-    this.dynamicBackground = 'linear-gradient(135deg, #1c2a38, #3a4b5d)'; // Fundo escuro temporário durante o carregamento
+    this.dynamicBackground = 'linear-gradient(135deg, #1c2a38, #3a4b5d)'; // Fundo escuro tempor\u00E1rio durante o carregamento
 
     try {
       this.weatherService.getWeatherByCity(this.city).subscribe({
         next: (data) => {
           this.weatherData = data;
           this.isLoadingWeather = false;
-          // Atualiza o background dinamicamente
           this.dynamicBackground = this.getWeatherBackground(this.weatherData.weather[0].main, this.weatherData.main.temp);
           this.getForecastData(this.city);
+          this.searchService.addSearchToHistory(this.city);
+          this.searchService.incrementPopularCity(this.city);
         },
         error: (err) => {
           console.error('Erro ao buscar clima atual:', err);
-          this.weatherError = 'Não foi possível obter os dados do clima atual. Tente novamente.';
+          this.weatherError = 'N\u00E3o foi poss\u00EDvel obter os dados do clima atual. Tente novamente.';
           this.isLoadingWeather = false;
           this.forecastData = null;
           this.dynamicBackground = 'linear-gradient(135deg, #4b0000, #8b0000)'; // Fundo de erro
@@ -101,7 +115,7 @@ export class HomePage implements OnInit {
     this.weatherError = null;
     this.weatherData = null;
     this.forecastData = null;
-    this.dynamicBackground = 'linear-gradient(135deg, #1c2a38, #3a4b5d)'; // Fundo escuro temporário durante o carregamento
+    this.dynamicBackground = 'linear-gradient(135deg, #1c2a38, #3a4b5d)'; // Fundo escuro tempor\u00E1rio durante o carregamento
 
 
     try {
@@ -116,18 +130,20 @@ export class HomePage implements OnInit {
           this.city = data.name;
           this.dynamicBackground = this.getWeatherBackground(this.weatherData.weather[0].main, this.weatherData.main.temp);
           this.getForecastData(this.city);
+          this.searchService.addSearchToHistory(this.city);
+          this.searchService.incrementPopularCity(this.city);
         },
         error: (err) => {
           console.error('Erro ao buscar clima por coordenadas:', err);
-          this.weatherError = 'Não foi possível obter os dados de clima pela sua localização. Verifique as permissões.';
+          this.weatherError = 'N\u00E3o foi poss\u00EDvel obter os dados de clima pela sua localiza\u00E7\u00E3o. Verifique as permiss\u00F5es.';
           this.isLoadingWeather = false;
           this.forecastData = null;
           this.dynamicBackground = 'linear-gradient(135deg, #4b0000, #8b0000)'; // Fundo de erro
         }
       });
     } catch (error) {
-      console.error('Erro ao obter localização:', error);
-      this.weatherError = 'Não foi possível obter sua localização. Verifique as permissões do dispositivo.';
+      console.error('Erro ao obter localiza\u00E7\u00E3o:', error);
+      this.weatherError = 'N\u00E3o foi poss\u00EDvel obter sua localiza\u00E7\u00E3o. Verifique as permiss\u00F5es do dispositivo.';
       this.isLoadingWeather = false;
       this.dynamicBackground = 'linear-gradient(135deg, #4b0000, #8b0000)'; // Fundo de erro
     }
@@ -140,19 +156,19 @@ export class HomePage implements OnInit {
 
     this.weatherService.getWeatherForecastByCity(city).subscribe({
       next: (data) => {
-        console.log('Dados brutos da previsão recebidos da API:', data);
+        console.log('Dados brutos da previs\u00E3o recebidos da API:', data);
         if (data && data.list) {
           this.forecastData = this.processForecastData(data.list);
-          console.log('Previsão processada (forecastData):', this.forecastData);
+          console.log('Previs\u00E3o processada (forecastData):', this.forecastData);
         } else {
-          console.warn('Dados da previsão vazios ou em formato inesperado:', data);
+          console.warn('Dados da previs\u00E3o vazios ou em formato inesperado:', data);
           this.forecastData = null;
         }
         this.isLoadingForecast = false;
       },
       error: (err) => {
-        console.error('Erro ao buscar previsão (subscribe error):', err);
-        this.forecastError = 'Não foi possível obter a previsão para os próximos dias.';
+        console.error('Erro ao buscar previs\u00E3o (subscribe error):', err);
+        this.forecastError = 'N\u00E3o foi poss\u00EDvel obter a previs\u00E3o para os pr\u00F3ximos dias.';
         this.isLoadingForecast = false;
         this.forecastData = null;
       }
@@ -180,8 +196,8 @@ export class HomePage implements OnInit {
     const processedForecast: DailyForecast[] = [];
     const sortedKeys = Object.keys(dailyData).sort();
 
-    console.log('Chaves diárias encontradas:', sortedKeys);
-    console.log('Número de dias a processar (min(3, sortedKeys.length)):', Math.min(3, sortedKeys.length));
+    console.log('Chaves di\u00E1rias encontradas:', sortedKeys);
+    console.log('N\u00FAmero de dias a processar (min(3, sortedKeys.length)):', Math.min(3, sortedKeys.length));
 
     for (let i = 0; i < Math.min(3, sortedKeys.length); i++) {
       const key = sortedKeys[i];
@@ -194,64 +210,64 @@ export class HomePage implements OnInit {
       const dayDiff = Math.floor((dayEntry.date.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
 
       if (dayDiff === 0) { dayName = 'Hoje'; }
-      else if (dayDiff === 1) { dayName = 'Amanhã'; }
+      else if (dayDiff === 1) { dayName = 'Amanh\u00E3'; }
       else { dayName = this.getDayName(dayEntry.date.getDay()); }
 
       processedForecast.push({ name: dayName, icon: mainIcon, maxTemp: maxTemp, minTemp: minTemp });
     }
-    console.log('Previsão diária final processada:', processedForecast);
+    console.log('Previs\u00E3o di\u00E1ria final processada:', processedForecast);
     return processedForecast;
   }
 
   private getDayName(dayIndex: number): string {
-    const days = ['Dom.', 'Seg.', 'Ter.', 'Quar.', 'Quin.', 'Sex.', 'Sáb.'];
+    const days = ['Dom.', 'Seg.', 'Ter.', 'Quar.', 'Quin.', 'Sex.', 'S\u00E1b.'];
     return days[dayIndex];
   }
 
-  // Função para mapear condições de clima e temperatura para URLs de imagem/cores
+  // Fun\u00E7\u00E3o para mapear condi\u00E7\u00F5es de clima e temperatura para URLs de imagem/cores
   private getWeatherBackground(weatherMain: string, temperature: number): string {
     let backgroundValue = '';
 
-    // Mapeamento das condições para IMAGENS LOCAIS (assets/images/weather/)
-    // Certifique-se de que estes nomes de arquivo correspondem exatamente aos arquivos que você baixou
+    // Mapeamento das condi\u00E7\u00F5es para IMAGENS LOCAIS
+    // MANTER OS CAMINHOS EXATAMENTE COMO FORNECIDOS PELO USU\u00C1RIO.
     const imageMap: { [key: string]: string } = {
-        // Céu Claro
-        'clear-hot': 'assets/images/ceu_quente.jpg', // >28°C (você forneceu este!)
-        'clear-mild': 'assets/images/sol_ameno.jpg', // 20-28°C (você forneceu este!)
-        'clear-cold': 'assets/images/sol_frio.jpg', // <20°C (você forneceu este!)
+        // C\u00E9u Claro
+        'clear-hot': 'assets/images/ceu_quente.jpg', // >28\u00B0C
+        'clear-mild': 'assets/images/sol_ameno.jpg', // 20-28\u00B0C
+        'clear-cold': 'assets/images/sol_frio.jpg', // <20\u00B0C
 
         // Nublado / Nuvens
-        'clouds': 'assets/images/ceu_nublado.jpg', // Para qualquer nível de nuvens (você forneceu 'ceu-nebuloso.jpg')
-        'overcast': 'assets/images/ceu_nublado.jpg', // Usando a mesma imagem para céu mais encoberto se não houver outra específica
+        'clouds': 'assets/images/ceu_nublado.jpg', // Para qualquer n\u00EDvel de nuvens
+        'overcast': 'assets/images/ceu_nublado.jpg', // Usando a mesma imagem para c\u00E9u mais encoberto se n\u00E3o houver outra espec\u00EDfica
 
         // Chuva / Chuvisco
-        'rain': 'assets/images/ceu_chuvoso.jpg', // (você forneceu este!)
+        'rain': 'assets/images/ceu_chuvoso.jpg',
         'drizzle': 'assets/images/ceu_chuvoso.jpg', // Usando a mesma imagem de chuva para chuvisco
 
-        // Tempestade (com base em 'tempestade.jpg')
-        'thunderstorm': 'assets/images/tempestade.webp', // (você forneceu este!)
+        // Tempestade
+        'thunderstorm': 'assets/images/tempestade.webp',
 
-        // Neve (com base em 'neve.jpg')
-        'snow': 'assets/images/neve.jpg', // (você forneceu este!)
+        // Neve
+        'snow': 'assets/images/neve.jpg',
 
-        // Neblina / Nevoeiro (e condições similares que são visuais)
-        'mist': 'assets/images/neblina.jpg', // (você forneceu este como 'nevoa_seca.jpg', vou usar o nome mais genérico aqui para o código)
-        'fog': 'assets/images/neblina.jpg', // Usando a mesma da neblina
-        'haze': 'assets/images/nevoa_seca.jpg', // Você tem 'nevoa_seca.jpg' para este!
+        // Neblina / Nevoeiro (e condi\u00E7\u00F5es similares que s\u00E3o visuais)
+        'mist': 'assets/images/neblina.jpg',
+        'fog': 'assets/images/neblina.jpg',
+        'haze': 'assets/images/nevoa_seca.jpg',
 
-        // Outras condições do OpenWeatherMap
-        'smoke': 'assets/images/weather/smoky.jpg', // (placeholder)
-        'dust': 'assets/images/weather/dusty.jpg', // (placeholder)
-        'sand': 'assets/images/weather/sandy.jpg', // (placeholder)
-        'ash': 'assets/images/weather/ashy.jpg', // (placeholder)
-        'squall': 'assets/images/vento_forte.jpg', // (você forneceu este!)
-        'tornado': 'assets/images/tornado.jpg' // (você forneceu este!)
+        // Outras condi\u00E7\u00F5es do OpenWeatherMap
+        'smoke': 'assets/images/weather/smoky.jpg',
+        'dust': 'assets/images/weather/dusty.jpg',
+        'sand': 'assets/images/weather/sandy.jpg',
+        'ash': 'assets/images/weather/ashy.jpg',
+        'squall': 'assets/images/vento_forte.jpg',
+        'tornado': 'assets/images/tornado.jpg'
     };
 
 
     const condition = weatherMain.toLowerCase();
 
-    // Lógica para 'clear' baseada na temperatura
+    // L\u00F3gica para 'clear' baseada na temperatura
     if (condition === 'clear') {
         if (temperature > 28) {
             backgroundValue = imageMap['clear-hot'];
@@ -261,33 +277,38 @@ export class HomePage implements OnInit {
             backgroundValue = imageMap['clear-cold'];
         }
     } else if (condition.includes('cloud')) { // Trata "Clouds", "Few clouds", "Scattered clouds", "Broken clouds", "Overcast clouds"
-        backgroundValue = imageMap['clouds']; // Imagem específica para nublado (ceu-nebuloso.jpg)
+        backgroundValue = imageMap['clouds'];
     }
     else if (condition.includes('rain') || condition.includes('drizzle')) {
-        backgroundValue = imageMap['rain']; // Imagem para chuva (ceu_chuvoso.jpg)
+        backgroundValue = imageMap['rain'];
     }
     else if (condition.includes('thunderstorm')) {
-        backgroundValue = imageMap['thunderstorm']; // Imagem para tempestade (tempestade.jpg)
+        backgroundValue = imageMap['thunderstorm'];
     }
     else if (condition.includes('snow')) {
-        backgroundValue = imageMap['snow']; // Imagem para neve (neve.jpg)
+        backgroundValue = imageMap['snow'];
     }
     // Adicionado tratamento para neblina e similares explicitamente
-    else if (condition.includes('mist') || condition.includes('fog')) { // Mist e Fog usam 'neblina.jpg'
+    else if (condition.includes('mist') || condition.includes('fog')) {
         backgroundValue = imageMap['mist'];
     }
-    else if (condition.includes('haze')) { // Haze usa 'nevoa_seca.jpg'
+    else if (condition.includes('haze')) {
         backgroundValue = imageMap['haze'];
     }
-    // Fallback para outras condições não mapeadas
-    else if (imageMap[condition]) { // Se houver um mapeamento exato que não foi pego acima
+    // Fallback para outras condi\u00E7\u00F5es n\u00E3o mapeadas
+    else if (imageMap[condition]) {
         backgroundValue = imageMap[condition];
     }
     else {
-        backgroundValue = imageMap['clouds']; // Fallback padrão: imagem de nublado se a condição não for reconhecida
+        backgroundValue = imageMap['clouds'];
     }
 
     // Retorna a string completa para a propriedade 'background' do CSS
     return `url('${backgroundValue}') center center / cover no-repeat`;
+  }
+
+  // M\u00E9todo para navegar para a p\u00E1gina de hist\u00F3rico
+  goToHistory() {
+    this.router.navigateByUrl('/history');
   }
 }

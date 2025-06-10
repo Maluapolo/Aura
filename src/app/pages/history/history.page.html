@@ -1,0 +1,73 @@
+<div class="page-container">
+  <div class="background-overlay"></div>
+
+  <div class="main-content">
+    <div class="header-container">
+      <h1 class="page-title">Histórico e Populares</h1>
+      <button class="back-button" (click)="goToHome()">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+
+    <div class="section-card">
+      <div class="section-header">
+        <h2 class="section-title">
+          <i class="bi bi-clock-history"></i> Histórico de Busca
+        </h2>
+        <button class="clear-history-button" (click)="clearHistory()" [disabled]="isLoadingHistory || userSearchHistory.length === 0">
+          <i class="bi bi-trash"></i> Limpar
+        </button>
+      </div>
+
+      <div *ngIf="isLoadingHistory" class="loading-message text-center">
+        <div class="spinner"></div>
+        <p>Carregando histórico...</p>
+      </div>
+      <div *ngIf="historyError" class="error-display text-center">
+        <p class="error-message">{{ historyError }}</p>
+      </div>
+      <div *ngIf="!isLoadingHistory && userSearchHistory.length === 0 && !historyError" class="no-data-message text-center">
+        <p>Nenhum histórico de busca encontrado.</p>
+      </div>
+
+      <div class="city-list">
+        <button
+          *ngFor="let item of userSearchHistory"
+          class="city-tag"
+          (click)="searchCityFromList(item.city)"
+        >
+          {{ item.city }}
+        </button>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-header">
+        <h2 class="section-title">
+          <i class="bi bi-fire"></i> Cidades Populares
+        </h2>
+      </div>
+
+      <div *ngIf="isLoadingPopular" class="loading-message text-center">
+        <div class="spinner"></div>
+        <p>Carregando cidades populares...</p>
+      </div>
+      <div *ngIf="popularError" class="error-display text-center">
+        <p class="error-message">{{ popularError }}</p>
+      </div>
+      <div *ngIf="!isLoadingPopular && popularCities.length === 0 && !popularError" class="no-data-message text-center">
+        <p>Nenhuma cidade popular encontrada ainda.</p>
+      </div>
+
+      <div class="city-list">
+        <button
+          *ngFor="let city of popularCities"
+          class="city-tag popular"
+          (click)="searchCityFromList(city.name)"
+        >
+          {{ city.name }} ({{ city.count }})
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

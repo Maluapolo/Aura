@@ -108,7 +108,8 @@ body, html {
 
 /* Estilos dos Botões (Usar Minha Localização, Sair da Conta) */
 .location-button,
-.logout-button {
+.logout-button,
+.history-button {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -121,27 +122,34 @@ body, html {
   color: white;
   border: 1px solid rgba(255, 255, 255, 0.2);
   cursor: pointer;
-  transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+  transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out, transform 0.2s ease-in-out;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); /* Sombra para o botão */
 }
+
+.location-button:hover,
+.logout-button:hover,
+.history-button:hover {
+  transform: translateY(-2px); /* Pequeno efeito de levantamento */
+}
+
 
 .location-button {
   margin-top: 15px; /* Espaço abaixo da searchbar */
 }
+
+.history-button {
+    margin: 20px 0px;
+}
+
 
 .logout-button {
   margin-top: 40px; /* Mais espaço para o botão de sair */
   margin-bottom: 40px; /* Garante que há espaço para rolagem abaixo do botão */
 }
 
-.location-button:hover,
-.logout-button:hover {
-  background: rgba(255, 255, 255, 0.25);
-  border-color: rgba(255, 255, 255, 0.4);
-}
-
 .location-button i,
-.logout-button i {
+.logout-button i,
+.history-button i {
   font-size: 1.4em; /* Tamanho do ícone */
   margin-right: 10px;
   color: inherit;
@@ -340,7 +348,8 @@ body, html {
   .location-button,
   .current-weather,
   .forecast-card,
-  .logout-button {
+  .logout-button,
+  .history-button {
     max-width: 100%; /* Ocupa largura total em telas pequenas */
   }
   .temperature {

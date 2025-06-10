@@ -24,9 +24,13 @@ export const routes: Routes = [
   {
     path: 'home',
     loadComponent: () => import('./pages/home/home.page').then(m => m.HomePage),
-    canActivate: [AuthGuard] // Protege esta rota com o AuthGuard
+    canActivate: [AuthGuard]
   },
-  // Qualquer outra rota não encontrada redireciona para auth
+  {
+    path: 'history',
+    loadComponent: () => import('./pages/history/history.page').then(m => m.HistoryPage),
+    canActivate: [AuthGuard]
+  },
   {
     path: '**',
     redirectTo: 'auth'
